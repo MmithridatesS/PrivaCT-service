@@ -41,15 +41,6 @@ impl CachingLogListService {
         }
     }
 
-    pub async fn get_by_id(&self, id: &str) -> Result<Log, LogListError> {
-        self.check_and_refresh_cache().await?;
-        let cache = self.cache.lock().unwrap();
-        match cache.logs_by_id.get(id) {
-            Some(&index) => Ok(cache.logs[index].clone()),
-            None => Err(LogListError::ParseError("Log not found".to_string())),
-        }
-    }
-
     pub async fn get_all_by_operator(&self, operator: &str) -> Result<Vec<Log>, LogListError> {
         self.check_and_refresh_cache().await?;
         let cache = self.cache.lock().unwrap();

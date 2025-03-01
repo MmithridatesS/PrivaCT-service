@@ -174,7 +174,7 @@ async fn monitor_log(log: log_list::Log, account: Account, interval: tokio::time
 async fn register_service(service_id: &str, tx: mpsc::Sender<(prism_client::PrismClientRequest, oneshot::Sender<prism_client::PrismClientResponse>)>) -> Result<()> {
     let request = prism_client::PrismClientRequest::RegisterService(service_id.to_string());
     let (otx, orx) = oneshot::channel();
-    let send_res = tx.send((request, otx)).await;
+    let _ = tx.send((request, otx)).await;
     match orx.await {
         Ok(prism_client::PrismClientResponse::PendingTransaction { pending_transaction }) => {
             let account_res = pending_transaction.wait().await;

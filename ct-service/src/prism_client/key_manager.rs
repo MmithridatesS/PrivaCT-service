@@ -1,7 +1,5 @@
 use prism_keys::SigningKey;
-use keystore_rs::{KeyChain, KeyStore};
 use std::collections::HashMap;
-use anyhow::{Result, anyhow};
 
 pub struct KeyManager {
     signing_keys: HashMap<String, SigningKey>

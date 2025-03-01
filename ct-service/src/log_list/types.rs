@@ -112,14 +112,6 @@ impl SignedTreeHead {
             signature: sth.signature,
         }
     }
-    pub fn to_bytes(&self) -> Vec<u8> {
-        let mut bytes = Vec::with_capacity(64 + 32 + 16);
-        bytes.extend(&self.tree_size.to_le_bytes());
-        bytes.extend(&self.timestamp.to_le_bytes());
-        bytes.extend(&self.root_hash);
-        bytes.extend(&self.signature);
-        bytes
-    }
     pub fn serialize_json(&self) -> Vec<u8> {
         serde_json::to_vec(self).unwrap()
     }
