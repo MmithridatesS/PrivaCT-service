@@ -140,7 +140,7 @@ async fn monitor_log(log: log_list::Log, account: Account, interval: tokio::time
 
                     let data = log_list::SignedTreeHead::from_ctclient_sth(head.clone());
                     let bytes = data.serialize_json();
-                    let request = prism_client::PrismClientRequest::SetData {
+                    let request = prism_client::PrismClientRequest::AddData {
                         account: Box::new(account.clone()),
                         data: bytes,
                     };

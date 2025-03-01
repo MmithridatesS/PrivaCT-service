@@ -53,15 +53,20 @@ pub async fn run_prism_client(addr: String, mut rx: mpsc::Receiver<(PrismClientR
                     let _ = syn.send(PrismClientResponse::Account(result.ok()));
                 },
 
-                PrismClientRequest::SetData{account, data}=> {
+                PrismClientRequest::AddData{account, data}=> {
                     let user_signing_key = key_manager.get_key(account.id().to_string());
                     let signature_res = signing_key.sign(&data);
+                    if account.signed_data().last().is_some() && account.signed_data().last().unwrap().data == data {
+                        info!("Data for account {} already exists, skipping data addition", account.id());
+                        continue;
+
+                    };
                     if let Ok(signature) = signature_res {
                         let sb = SignatureBundle {
                             signature: signature,
                             verifying_key: signing_key.verifying_key()
                         };
-                        let result = prism_client.set_data(&account, data, sb, user_signing_key.unwrap()).await;
+                        let result = prism_client.add_data(&account, data, sb, user_signing_key.unwrap()).await;
                         let _account_resp = result.unwrap().wait_with_interval(tokio::time::Duration::from_secs(1)).await;
                         info!("Account {} updated successfully.", account.id());
                         let _ = syn.send(PrismClientResponse::PendingDataAddition);
@@ -81,7 +86,7 @@ pub enum PrismClientRequest {
         account_id: String,
         service_id: String
     },
-    SetData{
+    AddData{
         account: Box<Account>,
         data: Vec<u8>,
     }
