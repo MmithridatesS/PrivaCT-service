@@ -17,6 +17,10 @@ use std::env;
 
 const SERVICE_ID: &str = "PrivaCT";
 
+
+
+// For the cached logs we should use a Tokio::watch
+
 #[tokio::main]
 async fn main() -> Result<()> {
     dotenv().ok();
