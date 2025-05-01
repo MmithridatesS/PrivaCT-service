@@ -22,7 +22,7 @@ If you encounter the following error during compilation:
 error: `*mut ASN1_OBJECT` cannot be sent between threads safely
 ```
 
-Try removing the `Cargo.lock` and `target/` directory in the affected project and then build them individually.
+Try removing the `Cargo.lock` and `target/` directory in the affected project and then build them individually. Close the terminal and in a new terminal:
 
 For `devnet`:
 
